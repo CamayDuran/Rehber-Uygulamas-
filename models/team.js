@@ -18,9 +18,10 @@ module.exports = (sequelize, DataTypes) => {
     leagueId: DataTypes.INTEGER
   }, {
     sequelize,
-
+    // If you want to give a custom name to the deletedAt column
     modelName: 'team',
-
+    paranoid: true,
+    timestamps: true,
    
   });
   return team;

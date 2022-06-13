@@ -22,7 +22,18 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-      
+      deletedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      }
+    },
+    {
+      tableName: 'leagues',
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
+      deletedAt: 'deletedAt',
+      paranoid: true,
+      timestamps: true,
     });
   },
   async down(queryInterface, Sequelize) {

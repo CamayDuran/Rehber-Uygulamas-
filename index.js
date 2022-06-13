@@ -223,29 +223,15 @@ app.get('/leagues/:leagueId/teams/:teamId', function (req, res) {
 
 
 //kullanıcı idsi ve telefon id sine göre numara silme
-app.delete('/leagues/:leagueId/teams/:teamId', function (req, res) {
+app.delete('/leagues/teams/:id', function (req, res) {
   //destroy kullanma
-   league.destroy({
-    where:{
-      leagueId: req.params.leagueId,
-      id: req.params.teamId
+   team.destroy({
+    where:{  
+      id: 2
     }
-  }).then(() => {
-          res.send({isSuccess: true}); 
-         }).catch(() => {
-          res.send({isSuccess: false}); 
-         });
-//   team.delete({
-//         where: {
-//             leagueId: req.params.leagueId,
-//             id: req.params.teamId
-//         }
-//       }).then(() => {
-//         res.send({isSuccess: true}); 
-//     }).catch(() => {
-//         res.send({isSuccess: false}); 
-//     });;
- })
+  });
+
+ });
 //kişi bilgileri güncelleme
 app.patch('/leagues/:leagueId', function (req, res) {
   
