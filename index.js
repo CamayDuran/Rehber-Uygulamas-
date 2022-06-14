@@ -12,8 +12,6 @@ app.use(bodyParser.json());
 const league=context.league;
 const team=context.team;
 
-
-
 //Kişi ekleme
 app.post('/leagues', function (req, res) {
 
@@ -59,7 +57,49 @@ app.get('/leagues', function (req, res) {
     res.send(rows);
   });
 })
+app.get('/leagues/search', function (req, res) {
+  const searchQ = req.query.q;
+ 
+  //const queryStr=req.query.q
+  league.findOne({
+      where:{
+        [Op.or]:{
+          name: {
+            [Op.like]: `%${searchQ}%`
+          },
+          surname: {
+            [ Op.like]: `%${searchQ}%`
+          },
+          company: {
+            [Op.like]: `%${searchQ}%`
+          },
+          nameSurnameConcat:Sequelize.where(
+            Sequelize.fn('CONCAT', Sequelize.col('name'), ' ', Sequelize.col('surname')), 
+            { [Op.like]: `%${searchQ}%` }
+          )
+         
+        },
+        status:true
+         
 
+      }
+  })
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find Tutorial with name=${searchQ}.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving Tutorial with name=" + searchQ
+      });
+    });
+  
+})
 //name ine göre kişi bulma
 app.get('/leagues/:name', function (req, res) {
     const name = req.params.name;
@@ -67,7 +107,7 @@ app.get('/leagues/:name', function (req, res) {
     league.findOne({
         where:{
             name: {
-                [ require('sequelize').Op.like]: `%${name}%`
+                [ Op.like]: `%${name}%`
               }
         }
     })
@@ -95,7 +135,7 @@ app.get('/leagues/:name', function (req, res) {
      league.findOne({
         where:{
             surname: {
-                [ require('sequelize').Op.like]: `%${surname}%`
+                [ Op.like]: `%${surname}%`
               }
         }
     })
@@ -123,7 +163,7 @@ app.get('/leagues/:name', function (req, res) {
     league.findOne({
         where:{
             company: {
-                [ require('sequelize').Op.like]: `%${company}%`
+                [ Op.like]: `%${company}%`
               }
         }
     })
@@ -179,7 +219,7 @@ app.get('/leagues/teams/phone/:phone', function (req, res) {
    team.findOne({
         where:{
             phone: {
-                [ require('sequelize').Op.like]: `%${phone}%`
+                [ Op.like]: `%${phone}%`
               }
         }
     })
@@ -223,15 +263,20 @@ app.get('/leagues/:leagueId/teams/:teamId', function (req, res) {
 
 
 //kullanıcı idsi ve telefon id sine göre numara silme
-app.delete('/leagues/teams/:id', function (req, res) {
+app.delete('/leagues/:leagueId/teams/:teamId', function (req, res) {
   //destroy kullanma
    team.destroy({
     where:{  
-      id: 2
+     leagueId:req.params.leagueId,
+     id:req.params.teamId
     }
-  });
+  }).then((rows) => {
+    res.send({isSuccess:true});
+  }).catch((error)=>{
+    res.send({isSuccess:false});
+  });;
 
- });
+ })
 //kişi bilgileri güncelleme
 app.patch('/leagues/:leagueId', function (req, res) {
   

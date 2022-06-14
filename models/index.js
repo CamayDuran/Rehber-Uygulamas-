@@ -6,6 +6,7 @@ const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.json')[env];
+var Umzug = require('umzug');
 const db = {};
 
 let sequelize;
@@ -30,8 +31,40 @@ Object.keys(db).forEach(modelName => {
     db[modelName].associate(db);
   }
 });
-
+var migrate = function () {
+  return new Promise(
+      function (resolve, reject) {
+          const umzug = new Umzug({
+              storage: 'sequelize',
+              storageOptions: {
+                  sequelize: sequelize,
+              },
+              // see: https://github.com/sequelize/umzug/issues/17
+              migrations: {
+                  params: [
+                      sequelize.getQueryInterface(), // queryInterface
+                      sequelize.constructor, // DataTypes
+                      function () {
+                          throw new Error('Migration tried to use old style "done" callback. Please upgrade to "umzug" and return a promise instead.');
+                      }
+                  ],
+                  path: './migrations',
+                  pattern: /\.js$/
+              },
+              logging: function () {
+                  console.log.apply(null, arguments);
+              }
+          });
+          umzug.up().then(function (migrations) {
+              resolve(migrations);
+              // console.log(`Executed migrations ${migrations}`);
+          }).catch(err => {
+              reject(err);
+          });
+      }
+  );
+};
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-
+db.sequelize.migrate = migrate;
 module.exports = db;

@@ -14,6 +14,11 @@ module.exports = {
       leagueId: {
         type: Sequelize.INTEGER
       },
+      status:{
+        type:Sequelize.BOOLEAN,
+        allowNull:false,
+        defaultValue:true
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -21,18 +26,10 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      },
-      deletedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
       }
     },
     {
       tableName: 'leagues',
-      createdAt: 'created_at',
-      updatedAt: 'updated_at',
-      deletedAt: 'deletedAt',
-      paranoid: true,
       timestamps: true,
     });
   },

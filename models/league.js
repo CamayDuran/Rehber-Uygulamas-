@@ -16,12 +16,14 @@ module.exports = (sequelize, DataTypes) => {
   league.init({
     name: DataTypes.STRING,
     surname: DataTypes.STRING,
-    company: DataTypes.STRING
+    company: DataTypes.STRING,
+    status:DataTypes.BOOLEAN,
+    createdAt :DataTypes.DATE,
+    updatedAt :DataTypes.DATE,
   }, {
     sequelize,
     modelName: 'league',
-    paranoid: true,
-    timestamps: true,
+  
   });
   return league;
 };

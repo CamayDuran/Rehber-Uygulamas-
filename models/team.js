@@ -15,13 +15,14 @@ module.exports = (sequelize, DataTypes) => {
   }
   team.init({
     phone: DataTypes.STRING,
-    leagueId: DataTypes.INTEGER
+    leagueId: DataTypes.INTEGER,
+    status:DataTypes.BOOLEAN,
+    createdAt :DataTypes.DATE,
+    updatedAt :DataTypes.DATE,
   }, {
     sequelize,
     // If you want to give a custom name to the deletedAt column
     modelName: 'team',
-    paranoid: true,
-    timestamps: true,
    
   });
   return team;
