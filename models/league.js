@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     surname: DataTypes.STRING,
     company: DataTypes.STRING,
-    status:DataTypes.BOOLEAN,
+   // status:DataTypes.BOOLEAN,
     createdAt :DataTypes.DATE,
     updatedAt :DataTypes.DATE,
   }, {

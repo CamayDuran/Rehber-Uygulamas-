@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   team.init({
     phone: DataTypes.STRING,
     leagueId: DataTypes.INTEGER,
-    status:DataTypes.BOOLEAN,
+    //status:DataTypes.BOOLEAN,
     createdAt :DataTypes.DATE,
     updatedAt :DataTypes.DATE,
   }, {
